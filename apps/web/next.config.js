@@ -1,6 +1,4 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  transpilePackages: ['@zyxui'],
-};
+const nextConfig = require('@zyxui/config/next.config');
 
 module.exports = nextConfig;

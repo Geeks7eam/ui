@@ -46,12 +46,6 @@ const AccordionItem = React.forwardRef<HTMLDivElement, AccordionItemProps>(
       ...restProps
     } = props;
 
-    console.log('item.id');
-    console.log(item.id);
-
-    console.log('value.includes(String(item.id))');
-    console.log(value.includes(String(item.id)));
-
     return (
       <div
         ref={ref}

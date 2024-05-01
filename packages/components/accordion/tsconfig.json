@@ -2,6 +2,9 @@
   "extends": "@zyxui/tsconfig/react-library.json",
   "compilerOptions": {
     "baseUrl": ".",
+    "outDir": "dist",
+    "declaration": true,
+    "declarationDir": "dist/index.d.ts",
     "paths": {
       "@zag-js/types": ["./node_modules/@zag-js/types/dist/index.d.ts"]
       // "@zyxui/accordion": ["src/index.ts"]

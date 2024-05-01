@@ -60,11 +60,6 @@ const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(
       value: defaultValues,
     });
 
-    console.log('defaultValues');
-    console.log(defaultValues);
-    console.log('multiple');
-    console.log(multiple);
-
     return (
       <div ref={ref} className={classNames} {...props} {...rootProps}>
         {items?.map((item) => (

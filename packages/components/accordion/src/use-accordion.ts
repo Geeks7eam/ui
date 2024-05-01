@@ -1,29 +1,87 @@
-import { machine, connect, Context } from '@zag-js/accordion';
-import { useMachine, normalizeProps } from '@zag-js/react';
+import { TreeState } from '@react-stately/tree';
+import { ButtonHTMLAttributes, RefObject, useId } from 'react';
+import { useSelectableItem, useSelectableList } from '@react-aria/selection';
 
-type As<Props = any> = React.ElementType<Props>;
+import type { AriaAccordionProps } from '@react-types/accordion';
+import type { DOMAttributes, Node } from '@react-types/shared';
+import { useButton } from '@react-aria/button';
+import { mergeProps } from '@react-aria/utils';
 
-interface Props extends React.HTMLAttributes<HTMLDivElement> {
-  /**
-   * The ref to the DOM node.
-   */
-  ref?: React.Ref<HTMLDivElement | null>;
+export interface AccordionAria {
+  /** Props for the accordion container element. */
+  accordionProps: DOMAttributes;
 }
 
-// props type
-export type UseAccordion = Context;
+export interface AccordionItemAriaProps<T> {
+  item: Node<T>;
+}
 
-// return type
-export type UseAccordionReturn = ReturnType<typeof connect>;
+export interface AccordionItemAria {
+  /** Props for the accordion item button. */
+  buttonProps: ButtonHTMLAttributes<HTMLElement>;
+  /** Props for the accordion item content element. */
+  regionProps: DOMAttributes;
+}
 
-export function useAccordion(props: UseAccordion): UseAccordionReturn {
-  const { ...__props } = props;
+export function useAccordionItem<T>(
+  props: AccordionItemAriaProps<T>,
+  state: TreeState<T>,
+  ref: RefObject<HTMLButtonElement>,
+): AccordionItemAria {
+  let { item } = props;
+  let buttonId = useId();
+  let regionId = useId();
+  let isDisabled = state.disabledKeys.has(item.key);
 
-  const [state, send] = useMachine(machine({ ...__props }));
+  let { itemProps } = useSelectableItem({
+    selectionManager: state.selectionManager,
+    key: item.key,
+    ref,
+  });
 
-  const api = connect(state, send, normalizeProps);
+  let { buttonProps } = useButton(
+    mergeProps(itemProps as any, {
+      id: buttonId,
+      elementType: 'button',
+      isDisabled,
+      onPress: () => state.toggleKey(item.key),
+    }),
+    ref,
+  );
+
+  let isExpanded = state.expandedKeys.has(item.key);
 
   return {
-    ...api,
+    buttonProps: {
+      ...buttonProps,
+      'aria-expanded': isExpanded,
+      'aria-controls': isExpanded ? regionId : undefined,
+    },
+    regionProps: {
+      id: regionId,
+      role: 'region',
+      'aria-labelledby': buttonId,
+    },
+  };
+}
+
+export function useAccordion<T>(
+  props: AriaAccordionProps<T>,
+  state: TreeState<T>,
+  ref: RefObject<HTMLDivElement>,
+): AccordionAria {
+  let { listProps } = useSelectableList({
+    ...props,
+    ...state,
+    allowsTabNavigation: true,
+    disallowTypeAhead: true,
+    ref,
+  });
+
+  return {
+    accordionProps: {
+      ...listProps,
+      tabIndex: undefined,
+    },
   };
 }

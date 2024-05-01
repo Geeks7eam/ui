@@ -8,14 +8,21 @@
   "author": "Hamude Shahin <hamedsahin2018@icloud.com>",
   "homepage": "https://ui.geeksteam.org",
   "license": "MIT",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./src/index.ts",
+  "types": "./src/index.d.ts",
   "sideEffects": false,
   "files": [
     "dist"
   ],
+  "exports": {
+    "types": "./dist/types.d.ts",
+    "import": "./dist/index.mjs",
+    "require": "./dist/index.js"
+  },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "types": "dist/index.d.ts",
+    "main": "dist/index.js"
   },
   "repository": {
     "type": "git",
@@ -32,6 +39,12 @@
     "build:fast": "tsup src"
   },
   "dependencies": {
+    "@react-aria/button": "^3.9.0",
+    "@react-aria/selection": "^3.17.5",
+    "@react-aria/utils": "^3.22.0",
+    "@react-stately/tree": "^3.7.6",
+    "@react-types/accordion": "3.0.0-alpha.19",
+    "@react-types/shared": "^3.22.1",
     "@types/react": "^18.2.64",
     "@types/react-dom": "^18.2.21",
     "@zag-js/accordion": "^0.38.1",
