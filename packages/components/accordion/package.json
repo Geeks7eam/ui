@@ -12,17 +12,15 @@
   "types": "./src/index.d.ts",
   "sideEffects": false,
   "files": [
-    "dist"
+    "src"
   ],
-  "exports": {
-    "types": "./dist/types.d.ts",
-    "import": "./dist/index.mjs",
-    "require": "./dist/index.js"
-  },
   "publishConfig": {
     "access": "public",
     "types": "dist/index.d.ts",
-    "main": "dist/index.js"
+    "main": "dist/index.js",
+    "files": [
+      "dist"
+    ]
   },
   "repository": {
     "type": "git",

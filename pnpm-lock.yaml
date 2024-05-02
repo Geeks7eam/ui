@@ -212,12 +212,18 @@ importers:
       '@react-aria/button':
         specifier: ^3.9.0
         version: 3.9.0(react@18.2.0)
+      '@react-aria/focus':
+        specifier: ^3.16.2
+        version: 3.16.2(react@18.2.0)
       '@react-aria/selection':
         specifier: ^3.17.5
         version: 3.17.5(react-dom@18.2.0)(react@18.2.0)
       '@react-aria/utils':
         specifier: ^3.22.0
         version: 3.22.0(react@18.2.0)
+      '@react-stately/collections':
+        specifier: ^3.10.5
+        version: 3.10.5(react@18.2.0)
       '@react-stately/tree':
         specifier: ^3.7.6
         version: 3.7.6(react@18.2.0)
@@ -1902,26 +1908,13 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
     dependencies:
-      '@react-aria/focus': 3.15.0(react@18.2.0)
+      '@react-aria/focus': 3.16.2(react@18.2.0)
       '@react-aria/interactions': 3.20.0(react@18.2.0)
       '@react-aria/utils': 3.22.0(react@18.2.0)
       '@react-stately/toggle': 3.7.0(react@18.2.0)
       '@react-types/button': 3.9.1(react@18.2.0)
       '@react-types/shared': 3.22.1(react@18.2.0)
       '@swc/helpers': 0.5.3
-      react: 18.2.0
-    dev: false
-
-  /@react-aria/focus@3.15.0(react@18.2.0):
-    resolution: {integrity: sha512-nnxRyfqHuAjRwdQ4BpQyZPtGFKZmRU6cnaIb3pqWFCqEyJQensV7MA3TJ4Jhadq67cy1Ji5SYSlr1duBwjoYvw==}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
-    dependencies:
-      '@react-aria/interactions': 3.20.0(react@18.2.0)
-      '@react-aria/utils': 3.22.0(react@18.2.0)
-      '@react-types/shared': 3.22.1(react@18.2.0)
-      '@swc/helpers': 0.5.3
-      clsx: 1.2.1
       react: 18.2.0
     dev: false
 

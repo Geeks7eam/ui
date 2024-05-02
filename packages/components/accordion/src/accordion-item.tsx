@@ -1,82 +1,37 @@
-'use client';
+// 'use client';
 
-import React from 'react';
-import AccordionHeader from './accordion-header';
-import {
-  AccordionDefaultValue,
-  CollapseItemProps,
-  IconPosition,
-} from './types';
-import { AccordionProps } from './accordion';
-import AccordionContent from './accordion-content';
-import { UseAccordionReturn } from './use-accordion';
+import { TreeState } from '@react-stately/tree';
+import { Node } from '@react-types/shared';
+import { useRef } from 'react';
+import { useAccordionItem } from './use-accordion';
+import { FocusRing } from '@react-aria/focus';
 
-export type AccordionItemProps = {
-  iconPosition?: IconPosition;
-  item: CollapseItemProps;
-  multiple?: boolean;
-  defaultValues?: AccordionDefaultValue;
-} & React.HTMLAttributes<HTMLDivElement> &
-  Pick<AccordionProps, 'size' | 'variant'> &
-  Omit<UseAccordionReturn, 'rootProps'>;
+interface AccordionItemProps<T> {
+  item: Node<T>;
+  state: TreeState<T>;
+}
 
-const AccordionItem = React.forwardRef<HTMLDivElement, AccordionItemProps>(
-  (
-    {
-      children,
-      iconPosition,
-      size,
-      variant,
-      multiple,
-      defaultValues = [],
-      item,
-      ...props
-    },
-    ref,
-  ) => {
-    const {
-      getItemTriggerProps,
-      getItemContentProps,
-      value,
-      focusedValue,
-      getItemIndicatorProps,
-      getItemProps,
-      getItemState,
-      setValue,
-      ...restProps
-    } = props;
+function AccordionItem<T>({ item, state }: AccordionItemProps<T>) {
+  let ref = useRef<HTMLButtonElement>(null);
+  let { buttonProps, regionProps } = useAccordionItem({ item }, state, ref);
 
-    return (
-      <div
-        ref={ref}
-        {...restProps}
-        {...getItemProps({ value: String(item.id) })}
-      >
-        <AccordionHeader
-          iconPosition={iconPosition}
-          size={size}
-          variant={variant}
-          id={item.id}
-          open={value.includes(String(item.id))}
-          triggerProps={getItemTriggerProps({
-            value: String(item.id),
-          })}
-        >
-          {item.title}
-        </AccordionHeader>
-        <AccordionContent
-          size={size}
-          variant={variant}
-          open={value.includes(String(item.id))}
-          contentProps={getItemContentProps({ value: String(item.id) })}
-        >
-          {item.content}
-        </AccordionContent>
-      </div>
-    );
-  },
-);
+  let isExpanded = state.expandedKeys.has(item.key);
+  let isDisabled = state.disabledKeys.has(item.key);
 
-AccordionItem.displayName = 'AccordionItem';
+  let toggle = () => state.toggleKey(item.key);
+
+  return (
+    <div>
+      <h3>
+        <FocusRing within focusRingClass=''>
+          <button onClick={toggle} disabled={isDisabled} {...buttonProps}>
+            {item.rendered}
+          </button>
+        </FocusRing>
+      </h3>
+      <div {...regionProps}>{item.props.children}</div>
+    </div>
+  );
+}
 
 export default AccordionItem;

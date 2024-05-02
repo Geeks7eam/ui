@@ -1,30 +1,32 @@
+'use client';
+
 import React from 'react';
-import Accordion from '@zyxui/accordion';
+import Accordion, { AccordionItem } from '@zyxui/accordion/src';
+
+let items = [
+  { key: 'one', title: 'one title', children: 'one children' },
+  { key: 'two', title: 'two title', children: 'two children' },
+  {
+    key: 'three',
+    title: 'three title',
+    children: <input type='text' />,
+    hasChildItems: false,
+  },
+];
 
 const AccordionExample = () => {
   return (
-    <Accordion
-      defaultValues={['2']}
-      variant='bordered'
-      multiple={false}
-      items={[
-        {
-          id: '1',
-          title: 'Hello Header',
-          content: <p>This is an accordion</p>,
-        },
-        {
-          id: '2',
-          title: 'Hello Header 2',
-          content: <p>This is an accordion 2</p>,
-        },
-        {
-          id: '3',
-          title: 'Hello Header 3',
-          content: <p>This is an accordion 3</p>,
-        },
-      ]}
-    />
+    <Accordion defaultExpandedKeys={['one']} items={items}>
+      {(item) => (
+        <AccordionItem
+          key={item.key}
+          title={item.title}
+          hasChildItems={item.hasChildItems}
+        >
+          {item.children}
+        </AccordionItem>
+      )}
+    </Accordion>
   );
 };
 
