@@ -16,16 +16,21 @@ let items = [
 
 const AccordionExample = () => {
   return (
-    <Accordion defaultExpandedKeys={['one']} items={items}>
-      {(item) => (
-        <AccordionItem
-          key={item.key}
-          title={item.title}
-          hasChildItems={item.hasChildItems}
-        >
-          {item.children}
-        </AccordionItem>
-      )}
+    <Accordion defaultExpandedKeys={['one']}>
+      <AccordionItem
+        key={'item.key'}
+        title={'item.title'}
+        hasChildItems={false}
+      >
+        {'item.children'}
+      </AccordionItem>
+      <AccordionItem
+        key={'item.key 2'}
+        title={'item.title 2'}
+        hasChildItems={false}
+      >
+        {'item.children 2'}
+      </AccordionItem>
     </Accordion>
   );
 };

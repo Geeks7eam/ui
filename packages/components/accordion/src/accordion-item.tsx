@@ -1,10 +1,13 @@
 // 'use client';
 
 import { TreeState } from '@react-stately/tree';
-import { Node } from '@react-types/shared';
+import { Node, PressEvent } from '@react-types/shared';
 import { useRef } from 'react';
 import { useAccordionItem } from './use-accordion';
 import { FocusRing } from '@react-aria/focus';
+import { useHover, useFocus } from '@react-aria/interactions';
+
+import { mergeProps } from '@react-aria/utils';
 
 interface AccordionItemProps<T> {
   item: Node<T>;
@@ -13,23 +16,27 @@ interface AccordionItemProps<T> {
 
 function AccordionItem<T>({ item, state }: AccordionItemProps<T>) {
   let ref = useRef<HTMLButtonElement>(null);
-  let { buttonProps, regionProps } = useAccordionItem({ item }, state, ref);
+  let { buttonProps, regionProps, toggle } = useAccordionItem(
+    { item },
+    state,
+    ref,
+  );
 
   let isExpanded = state.expandedKeys.has(item.key);
   let isDisabled = state.disabledKeys.has(item.key);
 
-  let toggle = () => state.toggleKey(item.key);
+  // button focus props
+  const { focusProps } = useFocus({ isDisabled });
 
   return (
     <div>
       <h3>
-        <FocusRing within focusRingClass=''>
-          <button onClick={toggle} disabled={isDisabled} {...buttonProps}>
-            {item.rendered}
-          </button>
-        </FocusRing>
+        <button {...mergeProps(buttonProps, focusProps)} ref={ref}>
+          {item.rendered}
+        </button>
       </h3>
-      <div {...regionProps}>{item.props.children}</div>
+
+      {isExpanded && <div {...regionProps}>{item.props.children}</div>}
     </div>
   );
 }
