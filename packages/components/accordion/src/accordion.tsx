@@ -1,81 +1,86 @@
-'use client';
+// 'use client';
 
-import { VariantProps, cva } from 'class-variance-authority';
-import React from 'react';
-import { cn } from '@zyxui/lib';
-import {
-  AccordionDefaultValue,
-  CollapseItemProps,
-  IconPosition,
-} from './types';
-import AccordionItem from './accordion-item';
+import { useTreeState } from '@react-stately/tree';
+
 import { useAccordion } from './use-accordion';
+import React, { RefObject, useImperativeHandle, useMemo, useRef } from 'react';
+import { filterDOMProps, useObjectRef } from '@react-aria/utils';
+import AccordionItem from './accordion-item';
+import { AriaAccordionProps } from '@react-types/accordion';
+import { tv } from 'tailwind-variants';
+import { VariantProps } from 'class-variance-authority';
+import { Item } from '@react-stately/collections';
+import { CollectionChildren } from '@react-types/shared';
+// export { Item } from '@react-stately/collections';
 
-const accordionVariants = cva('', {
+const accordionVariants = tv({
+  base: 'w-full bg-red-200',
   variants: {
     variant: {
-      default: '[&_[data-part=item]]:border-b',
-      bordered:
-        '[&_[data-part=item]]:border-x [&_[data-part=item]]:border-t last:[&_[data-part=item]]:border-b',
-    },
-    size: {
-      sm: 'text-sm',
-      md: 'text-md',
-      lg: 'text-lg',
+      default: 'border-0',
+      bordered: 'border border-red-800',
     },
   },
   defaultVariants: {
     variant: 'default',
-    size: 'md',
   },
 });
 
-export type AccordionProps = {
-  items: CollapseItemProps[];
-  defaultValues?: AccordionDefaultValue;
-  multiple?: boolean;
-  iconPosition?: IconPosition;
-} & React.HTMLAttributes<HTMLDivElement> &
-  VariantProps<typeof accordionVariants>;
+type AccordionVariants = VariantProps<typeof accordionVariants>;
 
-const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(
-  (
+export type Item<T> = {
+  key: string;
+  title: string;
+  children: React.ReactNode;
+  hasChildItems?: boolean;
+};
+
+export type AccordionProps<T extends object> = AriaAccordionProps<T> &
+  AccordionVariants & {
+    ref?: RefObject<HTMLDivElement>;
+    twClassName?: string;
+  };
+
+function Accordion<T extends object>(props: AccordionProps<T>) {
+  const { variant, twClassName, ...__restProps } = props;
+
+  const ref = useObjectRef(__restProps?.ref);
+
+  let state = useTreeState<T>({
+    ...__restProps,
+    selectionMode: 'single',
+  });
+
+  let { accordionProps } = useAccordion(
     {
-      items,
-      defaultValues = [],
-      multiple = false,
-      size,
-      variant,
-      iconPosition = 'end',
-      className,
-      ...props
+      ...__restProps,
     },
+    state,
     ref,
-  ) => {
-    const classNames = cn(accordionVariants({ size, variant, className }));
+  );
+  const __items = useMemo(
+    () =>
+      [...state.collection].map((item) => (
+        <AccordionItem key={item.key} item={item} state={state} />
+      )),
+    [state.collection],
+  );
 
-    const { rootProps, ...restAccordionProps } = useAccordion({
-      id: 'id',
-      multiple,
-      value: defaultValues,
-    });
+  return (
+    <div
+      {...filterDOMProps(__restProps)}
+      {...accordionProps}
+      ref={ref}
+      className={accordionVariants({ variant, className: twClassName })}
+    >
+      {__items}
+    </div>
+  );
+}
 
-    return (
-      <div ref={ref} className={classNames} {...props} {...rootProps}>
-        {items?.map((item) => (
-          <AccordionItem
-            key={item.id}
-            item={item}
-            iconPosition={iconPosition}
-            defaultValues={defaultValues}
-            multiple={multiple}
-            {...restAccordionProps}
-          />
-        ))}
-      </div>
-    );
-  },
-);
+const ClickableListWithRef = <T extends object>(
+  props: AccordionProps<T> & { ref?: RefObject<HTMLDivElement> },
+) => <Accordion {...props} />;
 
-Accordion.displayName = 'Accordion';
-export default Accordion;
+ClickableListWithRef.displayName = 'Accordion';
+export default ClickableListWithRef;

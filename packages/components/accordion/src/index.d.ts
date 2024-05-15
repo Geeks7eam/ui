@@ -1,3 +1,5 @@
+import { AriaAccordionProps } from '@react-types/accordion';
+
 export type IconPosition = 'start' | 'end';
 
 export type CollapseItemProps = {
@@ -7,3 +9,5 @@ export type CollapseItemProps = {
 };
 
 export type AccordionDefaultValue = string[];
+
+export type AccordionProps<T extends object> = AriaAccordionProps<T> & {};

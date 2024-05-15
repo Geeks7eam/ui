@@ -12,17 +12,15 @@
   "types": "./src/index.d.ts",
   "sideEffects": false,
   "files": [
-    "dist"
+    "src"
   ],
-  "exports": {
-    "types": "./dist/types.d.ts",
-    "import": "./dist/index.mjs",
-    "require": "./dist/index.js"
-  },
   "publishConfig": {
     "access": "public",
     "types": "dist/index.d.ts",
-    "main": "dist/index.js"
+    "main": "dist/index.js",
+    "files": [
+      "dist"
+    ]
   },
   "repository": {
     "type": "git",
@@ -40,25 +38,26 @@
   },
   "dependencies": {
     "@react-aria/button": "^3.9.0",
+    "@react-aria/focus": "^3.17.0",
+    "@react-aria/interactions": "^3.21.2",
     "@react-aria/selection": "^3.17.5",
     "@react-aria/utils": "^3.22.0",
+    "@react-stately/collections": "^3.10.6",
     "@react-stately/tree": "^3.7.6",
     "@react-types/accordion": "3.0.0-alpha.19",
     "@react-types/shared": "^3.22.1",
-    "@types/react": "^18.2.64",
-    "@types/react-dom": "^18.2.21",
-    "@zag-js/accordion": "^0.38.1",
-    "@zag-js/react": "^0.38.1",
-    "@zag-js/types": "^0.38.1",
     "@zyxui/lib": "workspace:*",
     "@zyxui/tsconfig": "workspace:*",
     "class-variance-authority": "^0.7.0",
     "framer-motion": "^10.16.5",
     "lucide-react": "^0.292.0",
+    "tailwind-variants": "^0.2.1",
     "tsup": "^7.3.0"
   },
   "devDependencies": {
     "@types/node": "^20.11.24",
+    "@types/react": "^18.2.64",
+    "@types/react-dom": "^18.2.21",
     "clean-package": "2.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"

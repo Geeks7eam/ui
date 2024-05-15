@@ -1,5 +1,5 @@
 import { TreeState } from '@react-stately/tree';
-import { ButtonHTMLAttributes, RefObject, useId } from 'react';
+import { ButtonHTMLAttributes, RefObject, useCallback, useId } from 'react';
 import { useSelectableItem, useSelectableList } from '@react-aria/selection';
 
 import type { AriaAccordionProps } from '@react-types/accordion';
@@ -21,6 +21,7 @@ export interface AccordionItemAria {
   buttonProps: ButtonHTMLAttributes<HTMLElement>;
   /** Props for the accordion item content element. */
   regionProps: DOMAttributes;
+  toggle: () => void;
 }
 
 export function useAccordionItem<T>(
@@ -33,6 +34,7 @@ export function useAccordionItem<T>(
   let regionId = useId();
   let isDisabled = state.disabledKeys.has(item.key);
 
+  // useSelectableItem is a hook that provides the behavior of selectable items in a listbox or tree.
   let { itemProps } = useSelectableItem({
     selectionManager: state.selectionManager,
     key: item.key,
@@ -51,6 +53,11 @@ export function useAccordionItem<T>(
 
   let isExpanded = state.expandedKeys.has(item.key);
 
+  // toggle the expanded state of the item when the button is clicked
+  const toggle = useCallback(() => {
+    state.toggleKey(item.key);
+  }, []);
+
   return {
     buttonProps: {
       ...buttonProps,
@@ -62,6 +69,7 @@ export function useAccordionItem<T>(
       role: 'region',
       'aria-labelledby': buttonId,
     },
+    toggle,
   };
 }
 
