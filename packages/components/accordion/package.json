@@ -46,20 +46,18 @@
     "@react-stately/tree": "^3.7.6",
     "@react-types/accordion": "3.0.0-alpha.19",
     "@react-types/shared": "^3.22.1",
-    "@types/react": "^18.2.64",
-    "@types/react-dom": "^18.2.21",
-    "@zag-js/accordion": "^0.38.1",
-    "@zag-js/react": "^0.38.1",
-    "@zag-js/types": "^0.38.1",
     "@zyxui/lib": "workspace:*",
     "@zyxui/tsconfig": "workspace:*",
     "class-variance-authority": "^0.7.0",
     "framer-motion": "^10.16.5",
     "lucide-react": "^0.292.0",
+    "tailwind-variants": "^0.2.1",
     "tsup": "^7.3.0"
   },
   "devDependencies": {
     "@types/node": "^20.11.24",
+    "@types/react": "^18.2.64",
+    "@types/react-dom": "^18.2.21",
     "clean-package": "2.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
