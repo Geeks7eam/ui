@@ -12,12 +12,13 @@ import { mergeProps } from '@react-aria/utils';
 interface AccordionItemProps<T> {
   item: Node<T>;
   state: TreeState<T>;
+  multiple?: boolean;
 }
 
-function AccordionItem<T>({ item, state }: AccordionItemProps<T>) {
+function AccordionItem<T>({ item, state, multiple }: AccordionItemProps<T>) {
   let ref = useRef<HTMLButtonElement>(null);
-  let { buttonProps, regionProps, toggle } = useAccordionItem(
-    { item },
+  let { buttonProps, regionProps } = useAccordionItem(
+    { item, multiple },
     state,
     ref,
   );

@@ -39,10 +39,11 @@ export type AccordionProps<T extends object> = AriaAccordionProps<T> &
   AccordionVariants & {
     ref?: RefObject<HTMLDivElement>;
     twClassName?: string;
+    multiple?: boolean;
   };
 
 function Accordion<T extends object>(props: AccordionProps<T>) {
-  const { variant, twClassName, ...__restProps } = props;
+  const { variant, twClassName, multiple, ...__restProps } = props;
 
   const ref = useObjectRef(__restProps?.ref);
 
@@ -61,10 +62,18 @@ function Accordion<T extends object>(props: AccordionProps<T>) {
   const __items = useMemo(
     () =>
       [...state.collection].map((item) => (
-        <AccordionItem key={item.key} item={item} state={state} />
+        <AccordionItem
+          key={item.key}
+          item={item}
+          state={state}
+          multiple={multiple}
+        />
       )),
     [state.collection],
   );
+
+  console.log('accordionProps');
+  console.log(accordionProps);
 
   return (
     <div
