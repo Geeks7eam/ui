@@ -9,7 +9,6 @@
   "homepage": "https://ui.geeksteam.org",
   "license": "MIT",
   "main": "./src/index.ts",
-  "types": "./src/index.d.ts",
   "sideEffects": false,
   "files": [
     "src"
@@ -48,7 +47,6 @@
     "@react-types/shared": "^3.22.1",
     "@zyxui/lib": "workspace:*",
     "@zyxui/tsconfig": "workspace:*",
-    "class-variance-authority": "^0.7.0",
     "framer-motion": "^10.16.5",
     "lucide-react": "^0.292.0",
     "tailwind-variants": "^0.2.1",

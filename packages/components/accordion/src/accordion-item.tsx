@@ -6,16 +6,72 @@ import { useRef } from 'react';
 import { useAccordionItem } from './use-accordion';
 import { FocusRing } from '@react-aria/focus';
 import { useHover, useFocus } from '@react-aria/interactions';
+import { ChevronDownIcon } from 'lucide-react';
 
 import { mergeProps } from '@react-aria/utils';
+import { VariantProps, tv } from 'tailwind-variants';
+import { iconSizes } from './accordion';
 
-interface AccordionItemProps<T> {
+const accordionItemVariants = tv({
+  slots: {
+    button: 'flex w-full bg-red-300 justify-between items-center',
+    body: 'bg-yellow-100',
+    icon: '',
+    text: 'text-inherit',
+  },
+  variants: {
+    size: {
+      sm: {},
+      md: {},
+      lg: {},
+    },
+    iconPosition: {
+      start: {
+        text: 'order-2',
+        icon: 'order-1',
+        button: 'justify-start',
+      },
+      end: {
+        text: 'order-1',
+        icon: 'order-2',
+      },
+    },
+  },
+  compoundSlots: [
+    {
+      size: 'sm',
+      slots: ['button', 'body'],
+      class: ['p-2 text-[14px]'],
+    },
+    {
+      size: 'md',
+      slots: ['button', 'body'],
+      class: ['p-4 text-[18px]'],
+    },
+    {
+      size: 'lg',
+      slots: ['button', 'body'],
+      class: ['p-6 text-[24px]'],
+    },
+  ],
+});
+
+type AccordionItemVariants = VariantProps<typeof accordionItemVariants>;
+
+type AccordionItemProps<T> = {
   item: Node<T>;
   state: TreeState<T>;
   multiple?: boolean;
-}
+  size?: keyof typeof iconSizes;
+} & AccordionItemVariants;
 
-function AccordionItem<T>({ item, state, multiple }: AccordionItemProps<T>) {
+function AccordionItem<T>({
+  item,
+  state,
+  multiple,
+  size,
+  iconPosition,
+}: AccordionItemProps<T>) {
   let ref = useRef<HTMLButtonElement>(null);
   let { buttonProps, regionProps } = useAccordionItem(
     { item, multiple },
@@ -26,18 +82,32 @@ function AccordionItem<T>({ item, state, multiple }: AccordionItemProps<T>) {
   let isExpanded = state.expandedKeys.has(item.key);
   let isDisabled = state.disabledKeys.has(item.key);
 
+  // extract slot from variants
+  const { button, body, icon, text } = accordionItemVariants({});
+
   // button focus props
   const { focusProps } = useFocus({ isDisabled });
 
   return (
     <div>
       <h3>
-        <button {...mergeProps(buttonProps, focusProps)} ref={ref}>
-          {item.rendered}
+        <button
+          {...mergeProps(buttonProps, focusProps)}
+          className={button({ size, iconPosition })}
+          ref={ref}
+        >
+          <span className={text({ iconPosition })}>{item.rendered}</span>
+          <span className={icon({ iconPosition })}>
+            <ChevronDownIcon size={iconSizes[size || 'md']} />
+          </span>
         </button>
       </h3>
 
-      {isExpanded && <div {...regionProps}>{item.props.children}</div>}
+      {isExpanded && (
+        <div {...regionProps} className={body({ size })}>
+          {item.props.children}
+        </div>
+      )}
     </div>
   );
 }

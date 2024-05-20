@@ -1,20 +1,23 @@
-// 'use client';
-
 import { useTreeState } from '@react-stately/tree';
-
 import { useAccordion } from './use-accordion';
-import React, { RefObject, useImperativeHandle, useMemo, useRef } from 'react';
+import React, { RefObject, useMemo } from 'react';
 import { filterDOMProps, useObjectRef } from '@react-aria/utils';
 import AccordionItem from './accordion-item';
 import { AriaAccordionProps } from '@react-types/accordion';
 import { tv } from 'tailwind-variants';
-import { VariantProps } from 'class-variance-authority';
+import type { VariantProps } from 'tailwind-variants';
 import { Item } from '@react-stately/collections';
-import { CollectionChildren } from '@react-types/shared';
-// export { Item } from '@react-stately/collections';
+
+export const iconSizes = {
+  sm: 14,
+  md: 18,
+  lg: 24,
+};
+
+export type IconSizeType = keyof typeof iconSizes;
 
 const accordionVariants = tv({
-  base: 'w-full bg-red-200',
+  base: 'w-full bg-black',
   variants: {
     variant: {
       default: 'border-0',
@@ -28,22 +31,31 @@ const accordionVariants = tv({
 
 type AccordionVariants = VariantProps<typeof accordionVariants>;
 
-export type Item<T> = {
-  key: string;
-  title: string;
-  children: React.ReactNode;
-  hasChildItems?: boolean;
-};
+// export type Item<T> = {
+//   key: string;
+//   title: string;
+//   children: React.ReactNode;
+//   hasChildItems?: boolean;
+// };
 
 export type AccordionProps<T extends object> = AriaAccordionProps<T> &
   AccordionVariants & {
     ref?: RefObject<HTMLDivElement>;
     twClassName?: string;
     multiple?: boolean;
+    size?: IconSizeType;
+    iconPosition?: 'start' | 'end';
   };
 
 function Accordion<T extends object>(props: AccordionProps<T>) {
-  const { variant, twClassName, multiple, ...__restProps } = props;
+  const {
+    variant,
+    twClassName,
+    multiple,
+    size = 'md',
+    iconPosition = 'end',
+    ...__restProps
+  } = props;
 
   const ref = useObjectRef(__restProps?.ref);
 
@@ -67,13 +79,12 @@ function Accordion<T extends object>(props: AccordionProps<T>) {
           item={item}
           state={state}
           multiple={multiple}
+          size={size}
+          iconPosition={iconPosition}
         />
       )),
     [state.collection],
   );
-
-  console.log('accordionProps');
-  console.log(accordionProps);
 
   return (
     <div
