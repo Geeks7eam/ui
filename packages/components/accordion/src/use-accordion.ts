@@ -3,7 +3,7 @@ import { ButtonHTMLAttributes, RefObject, useCallback, useId } from 'react';
 import { useSelectableItem, useSelectableList } from '@react-aria/selection';
 
 import type { AriaAccordionProps } from '@react-types/accordion';
-import type { DOMAttributes, Node } from '@react-types/shared';
+import type { DOMAttributes, Key, Node } from '@react-types/shared';
 import { useButton } from '@react-aria/button';
 import { mergeProps } from '@react-aria/utils';
 
@@ -14,6 +14,7 @@ export interface AccordionAria {
 
 export interface AccordionItemAriaProps<T> {
   item: Node<T>;
+  multiple?: boolean;
 }
 
 export interface AccordionItemAria {
@@ -21,7 +22,6 @@ export interface AccordionItemAria {
   buttonProps: ButtonHTMLAttributes<HTMLElement>;
   /** Props for the accordion item content element. */
   regionProps: DOMAttributes;
-  toggle: () => void;
 }
 
 export function useAccordionItem<T>(
@@ -29,7 +29,7 @@ export function useAccordionItem<T>(
   state: TreeState<T>,
   ref: RefObject<HTMLButtonElement>,
 ): AccordionItemAria {
-  let { item } = props;
+  let { item, multiple } = props;
   let buttonId = useId();
   let regionId = useId();
   let isDisabled = state.disabledKeys.has(item.key);
@@ -41,22 +41,31 @@ export function useAccordionItem<T>(
     ref,
   });
 
+  // toggle the expanded state of the item when the button is clicked
+  const toggle = useCallback(
+    (itemKey: Key) => {
+      if (multiple) {
+        // if multiple is true, toggle the expanded state of the item
+        state.toggleKey(item.key);
+      } else {
+        // if multiple is false, set the expanded state of the item to true (thus other items will be collapsed)
+        state.setExpandedKeys(new Set([itemKey]));
+      }
+    },
+    [multiple, state],
+  );
+
   let { buttonProps } = useButton(
     mergeProps(itemProps as any, {
       id: buttonId,
       elementType: 'button',
       isDisabled,
-      onPress: () => state.toggleKey(item.key),
+      onPress: () => toggle(item.key),
     }),
     ref,
   );
 
   let isExpanded = state.expandedKeys.has(item.key);
-
-  // toggle the expanded state of the item when the button is clicked
-  const toggle = useCallback(() => {
-    state.toggleKey(item.key);
-  }, []);
 
   return {
     buttonProps: {
@@ -69,7 +78,6 @@ export function useAccordionItem<T>(
       role: 'region',
       'aria-labelledby': buttonId,
     },
-    toggle,
   };
 }
 
@@ -83,6 +91,7 @@ export function useAccordion<T>(
     ...state,
     allowsTabNavigation: true,
     disallowTypeAhead: true,
+    selectionManager: state.selectionManager,
     ref,
   });
 
