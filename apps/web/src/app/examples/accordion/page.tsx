@@ -16,7 +16,7 @@ let items = [
 
 const AccordionExample = () => {
   return (
-    <Accordion defaultExpandedKeys={['one']} multiple={false}>
+    <Accordion defaultExpandedKeys={['one']} multiple={true} iconPosition='end'>
       <AccordionItem key={'one'} title={'Test Text'} hasChildItems={false}>
         Lorem ipsum, dolor sit amet consectetur adipisicing elit. Veniam
         adipisci ut cumque assumenda blanditiis corrupti illo iste quis delectus

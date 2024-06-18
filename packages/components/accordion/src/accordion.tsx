@@ -7,6 +7,7 @@ import { AriaAccordionProps } from '@react-types/accordion';
 import { tv } from 'tailwind-variants';
 import type { VariantProps } from 'tailwind-variants';
 import { Item } from '@react-stately/collections';
+import { Transition } from 'framer-motion';
 
 export const iconSizes = {
   sm: 14,
@@ -15,6 +16,21 @@ export const iconSizes = {
 };
 
 export type IconSizeType = keyof typeof iconSizes;
+
+export type BodyTransitionType =
+  | 'inertia'
+  | 'spring'
+  | 'just'
+  | 'keyframes'
+  | 'tween';
+
+export type AnimationConfig = {
+  enabled?: boolean;
+  duration?: number;
+  easing?: string;
+  delay?: number;
+  bodyTransitionType?: BodyTransitionType;
+};
 
 const accordionVariants = tv({
   base: 'w-full bg-black',
@@ -45,6 +61,8 @@ export type AccordionProps<T extends object> = AriaAccordionProps<T> &
     multiple?: boolean;
     size?: IconSizeType;
     iconPosition?: 'start' | 'end';
+    // animationConfig?: AnimationConfig;
+    animationConfig?: Transition;
   };
 
 function Accordion<T extends object>(props: AccordionProps<T>) {
@@ -54,6 +72,7 @@ function Accordion<T extends object>(props: AccordionProps<T>) {
     multiple,
     size = 'md',
     iconPosition = 'end',
+    animationConfig = {},
     ...__restProps
   } = props;
 
@@ -81,6 +100,7 @@ function Accordion<T extends object>(props: AccordionProps<T>) {
           multiple={multiple}
           size={size}
           iconPosition={iconPosition}
+          animationConfig={animationConfig}
         />
       )),
     [state.collection],

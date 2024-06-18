@@ -10,12 +10,21 @@ import { ChevronDownIcon } from 'lucide-react';
 
 import { mergeProps } from '@react-aria/utils';
 import { VariantProps, tv } from 'tailwind-variants';
-import { iconSizes } from './accordion';
+import { AnimationConfig, BodyTransitionType, iconSizes } from './accordion';
+
+import {
+  LazyMotion,
+  m,
+  domAnimation,
+  AnimatePresence,
+  MotionConfig,
+  Transition,
+} from 'framer-motion';
 
 const accordionItemVariants = tv({
   slots: {
     button: 'flex w-full bg-red-300 justify-between items-center',
-    body: 'bg-yellow-100',
+    body: 'bg-yellow-100 h-full',
     icon: '',
     text: 'text-inherit',
   },
@@ -63,6 +72,8 @@ type AccordionItemProps<T> = {
   state: TreeState<T>;
   multiple?: boolean;
   size?: keyof typeof iconSizes;
+  // animationConfig?: AnimationConfig;
+  animationConfig?: Transition;
 } & AccordionItemVariants;
 
 function AccordionItem<T>({
@@ -71,6 +82,7 @@ function AccordionItem<T>({
   multiple,
   size,
   iconPosition,
+  animationConfig,
 }: AccordionItemProps<T>) {
   let ref = useRef<HTMLButtonElement>(null);
   let { buttonProps, regionProps } = useAccordionItem(
@@ -89,7 +101,7 @@ function AccordionItem<T>({
   const { focusProps } = useFocus({ isDisabled });
 
   return (
-    <div>
+    <LazyMotion features={domAnimation} strict>
       <h3>
         <button
           {...mergeProps(buttonProps, focusProps)}
@@ -97,18 +109,35 @@ function AccordionItem<T>({
           ref={ref}
         >
           <span className={text({ iconPosition })}>{item.rendered}</span>
-          <span className={icon({ iconPosition })}>
+          <m.span
+            className={icon({ iconPosition })}
+            style={{ overflow: 'hidden' }}
+            initial={{ rotate: isExpanded ? 180 : 0 }}
+            animate={{ rotate: isExpanded ? 180 : 0 }}
+            exit={{ rotate: 0 }}
+          >
             <ChevronDownIcon size={iconSizes[size || 'md']} />
-          </span>
+          </m.span>
         </button>
       </h3>
 
-      {isExpanded && (
-        <div {...regionProps} className={body({ size })}>
-          {item.props.children}
-        </div>
-      )}
-    </div>
+      <AnimatePresence initial={isExpanded} presenceAffectsLayout>
+        <MotionConfig transition={animationConfig}>
+          <m.div
+            style={{ overflow: 'hidden', background: 'transparent' }}
+            initial={{ height: 'auto' }}
+            animate={{
+              height: isExpanded ? 'auto' : 0,
+            }}
+            exit={{ height: 0 }}
+          >
+            <div {...regionProps} className={body({ size })}>
+              {item.props.children}
+            </div>
+          </m.div>
+        </MotionConfig>
+      </AnimatePresence>
+    </LazyMotion>
   );
 }
 
