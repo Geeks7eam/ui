@@ -1,0 +1,75 @@
+{
+  "name": "@zyxui/theme",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [
+    "theme",
+    "theme management",
+    "theme manager",
+    "react theme",
+    "react theme manager",
+    "tailwindcss",
+    "tailwindcss themes",
+    "tailwind",
+    "tailwind themes",
+    "dark mode",
+    "light mode",
+    "custom themes",
+    "css variables",
+    "theme provider",
+    "theme context",
+    "theme hook",
+    "typescript",
+    "turborepo",
+    "monorepo",
+    "nextjs",
+    "reactjs",
+    "ui themes",
+    "frontend",
+    "frontend themes"
+  ],
+  "author": "Hamude Shahin <hamedsahin2018@icloud.com>",
+  "homepage": "https://ui.geeksteam.org",
+  "license": "MIT",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "sideEffects": false,
+  "files": [
+    "src"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "types": "dist/index.d.ts",
+    "main": "dist/index.js",
+    "files": [
+      "dist"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zyx7eam/ui",
+    "directory": "packages/theme"
+  },
+  "bugs": {
+    "url": "git+https://github.com/zyx7eam/ui/issues"
+  },
+  "scripts": {
+    "build": "tsup src --dts",
+    "clean": "rm -rf dist .trubo node_modules",
+    "typecheck": "tsc --noEmit",
+    "build:fast": "tsup src"
+  },
+  "dependencies": {
+    "@zyxui/tsconfig": "workspace:*",
+    "tsup": "^7.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "clean-package": "2.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^5.4.5"
+  }
+}
