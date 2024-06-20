@@ -1,0 +1,80 @@
+{
+  "name": "@zyxui/cli",
+  "version": "0.4.2-beta",
+  "description": "",
+  "type": "module",
+  "keywords": [
+    "TailwindCSS",
+    "Tailwind",
+    "CSS",
+    "configuration",
+    "config",
+    "CLI",
+    "command-line",
+    "tool",
+    "React",
+    "Next.js",
+    "JavaScript",
+    "TypeScript",
+    "Turborepo",
+    "theme",
+    "colors",
+    "setup",
+    "custom",
+    "utility",
+    "yargs",
+    "fs-extra",
+    "frontend",
+    "web development",
+    "customization",
+    "npm package"
+  ],
+  "author": "Hamude Shahin <hamedsahin2018@icloud.com>",
+  "homepage": "https://ui.geeksteam.org",
+  "license": "MIT",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "sideEffects": false,
+  "files": [
+    "src"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "types": "dist/index.d.ts",
+    "main": "dist/index.cjs",
+    "files": [
+      "dist"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zyx7eam/ui",
+    "directory": "packages/cli"
+  },
+  "bugs": {
+    "url": "git+https://github.com/zyx7eam/ui/issues"
+  },
+  "bin": {
+    "zyxui": "bin/zyxui.cjs"
+  },
+  "scripts": {
+    "build": "tsup src --dts",
+    "clean": "rm -rf dist .trubo node_modules",
+    "typecheck": "tsc --noEmit",
+    "build:fast": "tsup src",
+    "start": "node dist/index.cjs"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^20.14.5",
+    "@types/yargs": "^17.0.32",
+    "tailwindcss": "^3.4.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "fs-extra": "^11.2.0",
+    "tsup": "^7.3.0",
+    "yargs": "^17.7.2"
+  }
+}
