@@ -16,6 +16,8 @@
     "@zyxui/config": "workspace:*",
     "@zyxui/flex": "workspace:*",
     "@zyxui/text": "workspace:*",
+    "@zyxui/theme": "workspace:*",
+    "@zyxui/cli": "workspace:*",
     "next": "14.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
