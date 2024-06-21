@@ -32,19 +32,14 @@
   "author": "Hamude Shahin <hamedsahin2018@icloud.com>",
   "homepage": "https://ui.geeksteam.org",
   "license": "MIT",
-  "main": "src/index.ts",
-  "types": "src/index.ts",
   "sideEffects": false,
+  "types": "dist/index.d.ts",
+  "main": "dist/index.js",
   "files": [
-    "src"
+    "dist"
   ],
   "publishConfig": {
-    "access": "public",
-    "types": "dist/index.d.ts",
-    "main": "dist/index.cjs",
-    "files": [
-      "dist"
-    ]
+    "access": "public"
   },
   "repository": {
     "type": "git",
@@ -54,27 +49,34 @@
   "bugs": {
     "url": "git+https://github.com/zyx7eam/ui/issues"
   },
+  "exports": "./dist/index.js",
   "bin": {
-    "zyxui": "bin/zyxui.cjs"
+    "zyxui": "dist/index.js"
   },
   "scripts": {
     "build": "tsup src --dts",
     "clean": "rm -rf dist .trubo node_modules",
     "typecheck": "tsc --noEmit",
     "build:fast": "tsup src",
-    "start": "node dist/index.cjs"
+    "start": "node dist/index.js"
   },
   "devDependencies": {
+    "@babel/core": "^7.24.7",
+    "@babel/preset-env": "^7.24.7",
+    "@babel/preset-typescript": "^7.24.7",
     "@types/fs-extra": "^11.0.4",
+    "@types/inquirer": "^9.0.7",
     "@types/node": "^20.14.5",
-    "@types/yargs": "^17.0.32",
+    "@zyxui/tsconfig": "workspace:*",
     "tailwindcss": "^3.4.4",
     "ts-node": "^10.9.2",
+    "type-fest": "^4.20.1",
     "typescript": "^5.4.5"
   },
   "dependencies": {
+    "commander": "^12.1.0",
     "fs-extra": "^11.2.0",
-    "tsup": "^7.3.0",
-    "yargs": "^17.7.2"
+    "inquirer": "^9.2.23",
+    "tsup": "^7.3.0"
   }
 }
