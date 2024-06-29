@@ -35,6 +35,7 @@
     "@react-aria/utils": "^3.22.0",
     "@zyxui/lib": "workspace:*",
     "@zyxui/tsconfig": "workspace:*",
+    "@zyxui/theme": "workspace:*",
     "class-variance-authority": "^0.7.0",
     "tsup": "^7.3.0"
   },

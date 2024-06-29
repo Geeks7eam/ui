@@ -1,70 +1,107 @@
 'use client';
 
 import React, {
-  createContext,
+  PropsWithChildren,
+  useCallback,
   useContext,
-  useState,
   useEffect,
-  useLayoutEffect,
+  useState,
 } from 'react';
+import {
+  ThemeProvider as NextThemeProvider,
+  useTheme as useNextTheme,
+} from 'next-themes';
 
-interface ThemeContextProps {
-  theme: string;
-  addTheme: (name: string, className: string) => void;
-  removeTheme: (name: string) => void;
-  changeTheme: (name: string) => void;
-}
+type Config = {
+  glassEffect?: boolean;
+};
 
-const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);
+type NextThemesProps = {
+  attribute?: string;
+  themes?: string[];
+  defaultTheme?: string;
+  enableSystem?: boolean;
+  enableColorScheme?: boolean;
+  storageKey?: string;
+  value?: { [key: string]: string };
+  forcedTheme?: string;
+  nonce?: string;
+  disableTransitionOnChange?: boolean;
+};
 
-const themes: Record<string, string> = {
+type ThemeContextProps = {
+  selectedTheme?: string;
+  changeTheme: (theme: string) => void;
+  config?: Config;
+  themesList: string[];
+};
+
+const ThemeContext = React.createContext<ThemeContextProps | undefined>(
+  undefined,
+);
+
+const __themes: Record<string, string> = {
   light: 'light',
   dark: 'dark',
 };
 
-interface ThemeProviderProps {
-  children: React.ReactNode;
+type ThemeProviderProps = PropsWithChildren<{
+  config?: Config;
+  nextThemeConfig?: NextThemesProps;
+}>;
+
+export function ThemeProvider({
+  children,
+  config,
+  nextThemeConfig,
+}: ThemeProviderProps) {
+  return (
+    <NextThemeProvider
+      {...nextThemeConfig}
+      attribute={nextThemeConfig?.attribute || 'class'}
+    >
+      <ThemeProviderWrapper config={config}>{children}</ThemeProviderWrapper>
+    </NextThemeProvider>
+  );
 }
 
-export const ThemeProvider = ({
+const ThemeProviderWrapper = ({
   children,
-}: ThemeProviderProps): React.ReactNode => {
-  const [theme, setTheme] = useState<string>('dark');
+  config: initialConfig = {},
+}: ThemeProviderProps) => {
+  const [config, setConfig] = useState<Config>(initialConfig);
+  const [themes, setThemes] = useState<Record<string, string>>(__themes);
 
-  useLayoutEffect(() => {
-    const root = document.documentElement;
-    Object.keys(themes).forEach((key) => {
-      root.classList.remove(themes[key]);
-    });
-    root.classList.add(themes[theme]);
-  }, [theme]);
+  const { theme, setTheme } = useNextTheme();
 
-  const addTheme = (name: string, className: string) => {
-    themes[name] = className;
-  };
+  useEffect(() => {
+    setConfig(initialConfig);
+  }, []);
 
-  const removeTheme = (name: string) => {
-    delete themes[name];
-  };
+  // change the theme
+  const changeTheme = useCallback(
+    (name: string) => {
+      if (themes[name]) {
+        setTheme(themes[name]);
+      } else {
+        throw new Error(`Theme ${name} does not exist`);
+      }
+    },
+    [themes, setTheme],
+  );
 
-  const changeTheme = (name: string) => {
-    if (themes[name]) {
-      setTheme(name);
-    } else {
-      console.warn(`Theme ${name} does not exist`);
-    }
-  };
+  const themesList = Object.keys(themes);
 
   return (
     <ThemeContext.Provider
-      value={{ theme, addTheme, removeTheme, changeTheme }}
+      value={{ selectedTheme: theme, changeTheme, config, themesList }}
     >
       {children}
     </ThemeContext.Provider>
   );
 };
 
-export const useTheme = (): ThemeContextProps => {
+export const useTheme = () => {
   const context = useContext(ThemeContext);
   if (!context) {
     throw new Error('useTheme must be used within a ThemeProvider');

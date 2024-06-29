@@ -6,6 +6,7 @@ import { ReactNode, forwardRef } from 'react';
 
 import { VariantProps, cva } from 'class-variance-authority';
 import { cn } from '@zyxui/lib';
+import { useTheme } from '@zyxui/theme';
 
 const buttonVariants = cva(
   'relative inline-flex gap-1 items-center justify-center font-medium transition-all border aria-[disabled=true]:opacity-40',
@@ -46,6 +47,9 @@ const buttonVariants = cva(
       iconOnly: {
         true: 'p-0',
         false: '',
+      },
+      glassEffect: {
+        true: 'bg-opacity-10',
       },
     },
     compoundVariants: [
@@ -225,6 +229,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     ref,
   ) => {
     const forwardRef = useObjectRef(ref);
+    const { config } = useTheme();
 
     const { buttonProps, isPressed } = useButton(props, forwardRef);
 
@@ -237,6 +242,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         variant,
         iconOnly,
         className,
+        glassEffect: config?.glassEffect || false,
       }),
     );
 
