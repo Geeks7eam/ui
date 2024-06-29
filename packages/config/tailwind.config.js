@@ -8,8 +8,9 @@ module.exports = {
     './components/**/*.{js,ts,jsx,tsx}',
     './app/**/*.{js,ts,jsx,tsx}',
     './src/**/*.{js,ts,jsx,tsx}',
-    '../../packages/components/**/*.{js,ts,jsx,tsx}'
+    '../../packages/components/**/*.{js,ts,jsx,tsx}',
   ],
+  darkMode: ['class', '[data-theme^="dark-"]'],
   theme: {
     screens: {
       xs: '280px',

@@ -1,16 +1,18 @@
 'use client';
-import Button from '@zyxui/button/dist/button';
+import Button from '@zyxui/button';
+import Flex from '@zyxui/flex';
 import { useTheme } from '@zyxui/theme';
 import React from 'react';
 
 const Header = () => {
-  const { changeTheme, theme } = useTheme();
+  const { changeTheme, selectedTheme, themesList } = useTheme();
 
   return (
     <header>
-      <Button onPress={() => changeTheme(theme === 'light' ? 'dark' : 'light')}>
-        Change Theme
-      </Button>
+      <Flex gap={'md'}>
+        <Button onPress={() => changeTheme('dark')}>Dark</Button>
+        <Button onPress={() => changeTheme('light')}>Light</Button>
+      </Flex>
     </header>
   );
 };

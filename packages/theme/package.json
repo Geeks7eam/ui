@@ -61,6 +61,7 @@
   },
   "dependencies": {
     "@zyxui/tsconfig": "workspace:*",
+    "next-themes": "^0.3.0",
     "tsup": "^7.3.0"
   },
   "devDependencies": {
